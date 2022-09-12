@@ -48,4 +48,17 @@ nn.Conv2d(32, 16, kernel_size=3), 👈 32 feature maps на входе
     '''
 ).render_block()
 
+Block(
+    'Не все данные на видеокарте/ЦП. ', 
+    'RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!',
+    'Проверяем, чтобы была корректно задана переменная `device`, а все данные находились на одном устройстве. ', 
+'''
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model.to(device)
+model.train()
+for sample, labels in train_loader:
+    samples, labels = samples.to(device), labels.to(device)
+'''
+)
+
 
