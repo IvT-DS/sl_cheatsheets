@@ -59,6 +59,6 @@ model.train()
 for sample, labels in train_loader:
     samples, labels = samples.to(device), labels.to(device)
 '''
-)
+).render_block()
 
 
