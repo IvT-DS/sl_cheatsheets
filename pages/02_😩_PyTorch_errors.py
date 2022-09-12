@@ -57,7 +57,8 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device) # 👈 модель
 model.train()
 for sample, labels in train_loader:
-    samples, labels = samples.to(device), labels.to(device) # 👈 входные данные и таргет
+    samples = samples.to(device) # 👈 входные данные
+    labels = labels.to(device)   # 👈 таргет
 '''
 ).render_block()
 
