@@ -116,7 +116,28 @@ train_loader = DataLoader(train_dataset, shuffle=True, batch_size=32)
 Число классов `ImageFolder` определит по числу папок в директориях `train`, `valid` и т.д.
 Он упорядочит их по имени и назначит метки классов от 0 до N-1 (где N – число классов). 
 
+Часто `ImageFolder` не удовлетворяет нашим потребностям. Например, для обучения Denoising Autoencoder нам нужно забирать 
+из папок пары картинок: чистую и зашумленную версию. Ниже приведена базовая версия класса `CustomImageDataset`:
 
+```python
+import os
+import pandas as pd
+from torchvision.io import read_image
+
+class CustomImageDataset(Dataset):
+    def __init__(self, noise_dir, clean_dir):
+        self.noise_names = sorted(os.listdir(noise_dir))
+        self.clean_names = sorted(os.listdir(clean_dir))
+
+    def __len__(self):
+        return len(self.noise_names)
+
+    def __getitem__(self, idx):
+        noisy_img = read_image(self.noise_names[idx])
+        clean_img = read_image(self.clean_names[idx])
+        # pass another transformations
+        return noisy_img, clean_img
+```
 '''
 
 
