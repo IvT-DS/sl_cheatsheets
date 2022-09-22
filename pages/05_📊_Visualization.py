@@ -2,7 +2,9 @@ from random import seed
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+import random_word
 from random_word import RandomWords
+print(random_word.__version__)
 
 # get words for xticks
 r = RandomWords()
