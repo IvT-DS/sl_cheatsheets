@@ -10,7 +10,7 @@ with st.form('teams_generator'):
                     # add here more names as str
                 ]
             )
-    team_names = st.text_input('Teams', placeholder='Poisson, Leibniz, Kullback, LeCunn, Hochreiter')
+    team_names = st.text_input('Teams', placeholder='Logistic Regression, Gradient Boosting, Random Forest, Support Vector Machine')
 
     st.form_submit_button('Generate teams!', on_click=random_people_choice, args=(names.split(','), team_names.split(',')))   
 
