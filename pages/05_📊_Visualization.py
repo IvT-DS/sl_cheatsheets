@@ -9,6 +9,7 @@ print(random_word.__version__)
 # get words for xticks
 r = RandomWords()
 words = r.get_random_words(limit=10)
+print(words)
 
 # get prob distribution for values
 np.random.seed(42)
