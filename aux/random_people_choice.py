@@ -1,3 +1,5 @@
+from numpy.random import choice
+
 def random_people_choice(people: list, teams_names: list) -> dict:
     teams = {}
     p = len(people)
