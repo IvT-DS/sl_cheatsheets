@@ -127,7 +127,7 @@ from torchvision.io import read_image
 preprocessing = T.Compose(
     [
         T.ToPILImage(),
-        T.Resize((100, 200)), # <------ свой размер
+        T.Resize((w, h)), # <------ свой размер
         T.ToTensor()
     ]
 )
