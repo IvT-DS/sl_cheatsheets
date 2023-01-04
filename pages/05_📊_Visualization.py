@@ -2,14 +2,17 @@ from random import seed
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-import random_word
-from random_word import RandomWords
-print(random_word.__version__)
+# import random_word
+from random_word import Wordnik
+wordnik_service = Wordnik()
+
+# print(random_word.__version__)
 
 # get words for xticks
-r = RandomWords()
-words = r.get_random_words(limit=10)
-print(words)
+# r = RandomWords()
+# r.g
+words = wordnik_service.get_random_words(limit=10)
+# print(words)
 
 # get prob distribution for values
 np.random.seed(42)
@@ -29,6 +32,13 @@ def softmax(x: np.array, temp: int = 1) -> np.array:
     return np.exp(x/temp) / np.sum(np.exp(x/temp))
 
 with st.expander('Softmax with temperature'):
+    st.write(
+        '''
+            $$
+                softmax(x)_i = \dfrac{e^{y_i / T}}{\sum_{j}^{N}e^{y_i / T}}
+            $$
+        '''
+    )
     temp = st.slider('Temperature', 1, 30, 1, 1)
     left_col, right_col =  st.columns(2)
     
