@@ -58,4 +58,5 @@ with st.expander('Softmax with temperature'):
         ax_2.set_xticklabels(st.session_state['words'], rotation=90)
         st.pyplot(fig_2)
 
-    
+with st.expander('Computation graph 🔥Pytorch'):
+    st.image('https://miro.medium.com/max/504/0*4UHwQnsmUjyD7VtW.gif')
