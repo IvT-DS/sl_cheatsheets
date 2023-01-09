@@ -60,3 +60,6 @@ with st.expander('Softmax with temperature'):
 
 with st.expander('Computation graph 🔥Pytorch'):
     st.image('https://miro.medium.com/max/504/0*4UHwQnsmUjyD7VtW.gif')
+
+    st.markdown('1. [Computational graphs in PyTorch and TensorFlow](https://towardsdatascience.com/computational-graphs-in-pytorch-and-tensorflow-c25cc40bdcd1)')
+    st.markdown('2. [Computation Graphs](https://www.cs.cornell.edu/courses/cs5740/2017sp/lectures/04-nn-compgraph.pdf)')
