@@ -20,4 +20,4 @@ with st.form('teams_generator'):
 if names and team_names:
     pairs = random_people_choice(names.split(','), team_names.split(','))
     for team_name, names in pairs.items():
-        st.write(f'{team_name} {(", ".join(names))}')
+        st.markdown(f'*{team_name}* {(", ".join(names))}')
