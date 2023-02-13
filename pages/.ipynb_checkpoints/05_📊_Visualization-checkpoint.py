@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 # import random_word
 from random_word import Wordnik
 wordnik_service = Wordnik()
-from PIL import Image
 
 # print(random_word.__version__)
 
@@ -112,7 +111,7 @@ with st.expander('Singular value decomposition (SVD)'):
         max_k = len(sing_values)
 
         # оформляем по-другому, чтобы не превышало максимальной длины строки по PEP
-        k_components = st.slider(
+        k_components = st.sidebar.slider(
             label='Количество сингулярных значений', 
             min_value=1, 
             max_value=len(sing_values), 
