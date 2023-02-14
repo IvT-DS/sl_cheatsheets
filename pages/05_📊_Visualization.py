@@ -163,4 +163,4 @@ with st.expander('Singular value decomposition (SVD)'):
         st.write('U = ', U3.shape[0], 'x', U3.shape[1], '=', U3.shape[0] * U3.shape[1], 'значений'  )
         
         
-        st.markdown('[@trojanof](https://github.com/trojanof)')
+    st.markdown('[@trojanof](https://github.com/trojanof)')
