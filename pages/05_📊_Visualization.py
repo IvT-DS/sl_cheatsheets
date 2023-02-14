@@ -88,8 +88,7 @@ with st.expander('Singular value decomposition (SVD)'):
     """)
     st.caption('''
     *Для этого загрузите изображение :*
-    ''')  
-    st.header('Загрузите картинку')
+    ''')
 
     st.markdown("""
     Можно драг-н-дроп 
