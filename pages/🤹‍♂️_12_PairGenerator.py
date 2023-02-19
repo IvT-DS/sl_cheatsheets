@@ -53,4 +53,4 @@ names = st.radio(
 if names and len(labels) != 0:
     pairs = random_people_choice(names.split(','), labels)
     for team_name, names in pairs.items():
-        st.markdown(f'_{team_name}_ {(", ".join(names))}')
+        st.markdown(f'__{team_name}__ {(", ".join(names))}')
