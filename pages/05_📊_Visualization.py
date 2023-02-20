@@ -45,7 +45,7 @@ with st.expander('Softmax with temperature'):
     
     with left_col:
         fig_1, ax_1 = plt.subplots()
-        ax_1.bar(np.arange(len(x)), softmax(x))
+        ax_1.bar(np.arange(len(x)), softmax(x), color='#4520AB')
         ax_1.set_title('Softmax')
         ax_1.set_xticks(np.arange(len(x)))
         ax_1.set_xticklabels(st.session_state['words'], rotation=90)
@@ -53,7 +53,7 @@ with st.expander('Softmax with temperature'):
     with right_col:
         scores = softmax(x, temp=temp)
         fig_2, ax_2 = plt.subplots()
-        ax_2.bar(np.arange(len(x)), scores)
+        ax_2.bar(np.arange(len(x)), scores, color='#4520AB')
         ax_2.set_title('Softmax with temp')
         ax_2.set_xticks(np.arange(len(x)))
         ax_2.set_xticklabels(st.session_state['words'], rotation=90)
