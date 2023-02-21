@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from random_word import Wordnik
 wordnik_service = Wordnik()
 from PIL import Image
-from sklearn.linear_model import Ridge, Lasso, LinearRegression
+from sklearn.linear_model import Ridge, Lasso, LinearRegression, HuberRegressor
 
 # print(random_word.__version__)
 
@@ -167,31 +167,40 @@ with st.expander('Singular value decomposition (SVD)'):
 
 
 with st.expander('Регуляризация'): 
-
-    alpha = st.slider('Alpha', 0, 20, value=1)
+    n_outliers = st.slider('N_outliers/N_samples', .01, 1., .3)
+    ridge_col, lasso_col, huber_col = st.columns(3)
+    with ridge_col:
+        alpha_rid = st.slider('Alpha for ridge', 0, 10, 1)
+    with lasso_col:
+        alpha_las = st.slider('Alpha for lasso', 0, 10, 1)
+    with huber_col:
+        alpha_huber = st.slider('Alpha for huber', 0, 10, 1)
 
     x = np.linspace(0, 10, 100)
-    x_outliers = np.linspace(1.5, 3, 20)
-    y = x*1.5 + np.random.normal(0, 2, size=100)
-    y_outliers = x_outliers * 7 + np.random.normal(0, 3, size=x_outliers.shape[0])
+    x_outliers = np.linspace(5.5, 8, int(x.shape[0] * n_outliers))
+    y = x*1.5 + np.random.normal(10, 2, size=x.shape[0])
+    y_outliers = x_outliers * 40 + np.random.normal(0, 3, size=x_outliers.shape[0])
 
     x = np.concatenate((x, x_outliers))
     y = np.concatenate((y, y_outliers))
 
-    ols = LinearRegression()
-    ridge = Ridge(alpha=alpha, max_iter=10000)
-    lasso = Lasso(alpha=alpha, max_iter=10000)
+    ridge = Ridge(alpha=alpha_rid, max_iter=10000)
+    lasso = Lasso(alpha=alpha_las, max_iter=10000)
+    huber = HuberRegressor(alpha=alpha_huber)
 
-    ols.fit(x.reshape(-1, 1), y.reshape(-1, 1))
     ridge.fit(x.reshape(-1, 1), y.reshape(-1, 1))
     lasso.fit(x.reshape(-1, 1), y.reshape(-1, 1))
+    huber.fit(x.reshape(-1, 1), y.reshape(-1, 1))
 
     
-
+    plt.style.use('bmh')
     fig, ax = plt.subplots()
-    ax.scatter(x, y, marker='.')
-    ax.plot(np.arange(0, 11), ols.predict(np.arange(11).reshape(-1, 1)), c='cyan', label='OLS')
-    ax.plot(np.arange(0, 11), ridge.predict(np.arange(11).reshape(-1, 1)), c='red', label='Ridge')
-    ax.plot(np.arange(0, 11), lasso.predict(np.arange(11).reshape(-1, 1)), c='green', label='Lasso')
+    ax.scatter(x, y, c='red')
+    ax.plot(np.arange(0, 11), ridge.predict(np.arange(11).reshape(-1, 1)), 
+            label='Ridge', linestyle='dotted')
+    ax.plot(np.arange(0, 11), lasso.predict(np.arange(11).reshape(-1, 1)),
+            label='Lasso', linestyle='dashed')
+    ax.plot(np.arange(0, 11), huber.predict(np.arange(11).reshape(-1, 1)), 
+                label='Huber', linestyle='dashdot')
     plt.legend()
     st.pyplot(fig)
