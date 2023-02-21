@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from random_word import Wordnik
 wordnik_service = Wordnik()
 from PIL import Image
+from sklearn.linear_model import Ridge, Lasso, LinearRegression
 
 # print(random_word.__version__)
 
@@ -163,3 +164,34 @@ with st.expander('Singular value decomposition (SVD)'):
         
         
     st.markdown('[@trojanof](https://github.com/trojanof)')
+
+
+with st.expander('Регуляризация'): 
+
+    alpha = st.slider('Alpha', 0, 20, value=1)
+
+    x = np.linspace(0, 10, 100)
+    x_outliers = np.linspace(1.5, 3, 20)
+    y = x*1.5 + np.random.normal(0, 2, size=100)
+    y_outliers = x_outliers * 7 + np.random.normal(0, 3, size=x_outliers.shape[0])
+
+    x = np.concatenate((x, x_outliers))
+    y = np.concatenate((y, y_outliers))
+
+    ols = LinearRegression()
+    ridge = Ridge(alpha=alpha, max_iter=10000)
+    lasso = Lasso(alpha=alpha, max_iter=10000)
+
+    ols.fit(x.reshape(-1, 1), y.reshape(-1, 1))
+    ridge.fit(x.reshape(-1, 1), y.reshape(-1, 1))
+    lasso.fit(x.reshape(-1, 1), y.reshape(-1, 1))
+
+    
+
+    fig, ax = plt.subplots()
+    ax.scatter(x, y, marker='.')
+    ax.plot(np.arange(0, 11), ols.predict(np.arange(11).reshape(-1, 1)), c='cyan', label='OLS')
+    ax.plot(np.arange(0, 11), ridge.predict(np.arange(11).reshape(-1, 1)), c='red', label='Ridge')
+    ax.plot(np.arange(0, 11), lasso.predict(np.arange(11).reshape(-1, 1)), c='green', label='Lasso')
+    plt.legend()
+    st.pyplot(fig)
