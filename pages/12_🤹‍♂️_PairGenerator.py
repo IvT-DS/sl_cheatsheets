@@ -29,6 +29,8 @@ st.header('Генератор команд')
 
 teams = st.multiselect('Названия команд', [
     'pandas', 'matplotlib', 'seaborn',
+    'sklearn', 'CountVectorizer', 'TfIDFVectorizer',
+    'LogRegression', 'Ridge', 'LASSO',
     'Poisson', 'Bernoulli', 'Gauss',
     'XGBoost', 'LightGBM', 'CatBoost',
     'Dropout', 'Convolution','Linear',
