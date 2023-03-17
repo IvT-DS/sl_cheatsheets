@@ -1,5 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
+
+st.header('QA & cheatsheets Elbrus Data Science')
+
 components.html(
     """
     <!-- Yandex.Metrika counter -->
@@ -21,9 +24,6 @@ components.html(
 <!-- /Yandex.Metrika counter -->
     """
 )
-
-
-st.header('QA & cheatsheets Elbrus Data Science')
 
 
 
