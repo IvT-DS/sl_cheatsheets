@@ -9,29 +9,11 @@ from PIL import Image
 from sklearn.linear_model import Ridge, Lasso, LinearRegression, HuberRegressor
 
 import streamlit.components.v1 as components
+import plotly.express as px
 
 
 
-components.html(
-    """
-    <!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-   ym(92504528, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/92504528" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-""")
 
 # print(random_word.__version__)
 
@@ -190,7 +172,6 @@ with st.expander('Singular value decomposition (SVD)'):
         
     st.markdown('[@trojanof](https://github.com/trojanof)')
 
-
 with st.expander('Регуляризация'): 
     n_outliers = st.slider('N_outliers/N_samples', .01, 1., .3)
     ridge_col, lasso_col, huber_col = st.columns(3)
@@ -229,3 +210,51 @@ with st.expander('Регуляризация'):
                 label='Huber', linestyle='dashdot')
     plt.legend()
     st.pyplot(fig)
+
+
+# with st.expander('Линейная регрессия'): 
+
+#     k = st.slider('k', min_value=1., max_value=5., step=.1)
+#     b = st.slider('b', min_value=5., max_value=10., step=.5)
+#     x = np.linspace(0, 10, 100).reshape(-1, 1)
+#     y = (x*1.5 + np.random.normal(10, 2, size=x.shape[0])).reshape(-1, 1)
+
+#     lr = LinearRegression()
+#     lr.fit(x, y)
+    
+
+#     st.write(f'Coef: {lr.coef_[0][0]:.4f}, b: {lr.intercept_[0]:.4f}')
+#     plt.style.use('bmh')
+#     fig, ax = plt.subplots()
+#     ax.scatter(x, y, c='red')
+#     ax.plot(np.arange(0, 11), lr.predict(np.arange(11)), 
+#             label=f'Ridge: Coef: {lr.coef_[0][0]:.4f}, b: {lr.intercept_[0]:.4f}, \
+#                     mse: {(lr.predict(x) - y)**2/len(x):.4f}', 
+#                     linestyle='dotted')
+#     ax.plot(np.arange(0, 11), np.arange(11)*k+b)
+#             # label=f'Ridge: Coef: {lr.coef_[0][0]:.4f}, b: {lr.intercept_[0]:.4f}', linestyle='dotted')
+#     plt.legend()
+#     st.pyplot(fig)
+
+# fig.show()
+
+components.html(
+    """
+    <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(92504528, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/92504528" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+""")

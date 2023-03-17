@@ -2,7 +2,37 @@ import streamlit as st
 from aux.random_people_choice import random_people_choice
 import streamlit.components.v1 as components
 
+st.header('Генератор команд')
 
+teams = st.multiselect('Названия команд', [
+    'pandas', 'matplotlib', 'seaborn', 
+    'sklearn', 'CountVectorizer', 'TfIDFVectorizer',
+    'LogRegression', 'Ridge', 'LASSO', 'ElasticNet',
+    'Poisson', 'Bernoulli', 'Gauss',
+    'XGBoost', 'LightGBM', 'CatBoost',
+    'Dropout', 'Convolution','Linear',
+    'GPT', 'BERT', 'LSTM', 'RNN', 'LSTM', 
+    'ResNet', 'Inception', 'DenseNet', 
+    'YOLO', 'FasterRCNN', 'SQL', 'PySpark'
+])
+
+names = st.radio(
+            ' ', 
+            [
+                # 'Сиражудин, Мила, Семен, Анатолий, Гор, Матвей', 
+                'Никита, Сева, Костя, Катя, Ваня, Рома',
+                'Алексей, Аня, Галина, Владислав, Егор, Елена'
+                # add here more names as str
+            ]
+        )
+
+
+# print(labels)
+st.markdown('---------')
+if names and len(teams) != 0:
+    pairs = random_people_choice(names.split(','), teams)
+    for team_name, names in pairs.items():
+        st.markdown(f'__{team_name}__:  {(", ".join(names))}')
 
 components.html(
     """
@@ -24,35 +54,3 @@ components.html(
 <noscript><div><img src="https://mc.yandex.ru/watch/92504528" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 """)
-
-st.header('Генератор команд')
-
-teams = st.multiselect('Названия команд', [
-    'pandas', 'matplotlib', 'seaborn',
-    'sklearn', 'CountVectorizer', 'TfIDFVectorizer',
-    'LogRegression', 'Ridge', 'LASSO',
-    'Poisson', 'Bernoulli', 'Gauss',
-    'XGBoost', 'LightGBM', 'CatBoost',
-    'Dropout', 'Convolution','Linear',
-    'GPT', 'BERT', 'LSTM', 'RNN', 
-    'ResNet', 'Inception', 'DenseNet', 
-    'YOLO', 'FasterRCNN'
-])
-
-names = st.radio(
-            ' ', 
-            [
-                'Сиражудин, Мила, Семен, Анатолий, Гор, Матвей', 
-                'Никита, Сева, Костя, Катя, Ваня, Рома',
-                'Алексей, Аня, Галина, Владислав, Егор, Елена, Иван, Никита'
-                # add here more names as str
-            ]
-        )
-
-
-# print(labels)
-st.markdown('---------')
-if names and len(teams) != 0:
-    pairs = random_people_choice(names.split(','), teams)
-    for team_name, names in pairs.items():
-        st.markdown(f'__{team_name}__:  {(", ".join(names))}')

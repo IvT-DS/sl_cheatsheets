@@ -1,3 +1,5 @@
 .vscode
 .DS_Store
 __pycache__
+pages/13_torchviz.py
+aux/model_class.py
