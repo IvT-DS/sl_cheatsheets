@@ -1,6 +1,15 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
+import shutil
+
+total, used, free = shutil.disk_usage("/")
+
+print("Total: %d GiB" % (total // (2**30)))
+print("Used: %d GiB" % (used // (2**30)))
+print("Free: %d GiB" % (free // (2**30)))
+
+
 st.header('QA & cheatsheets Elbrus Data Science')
 
 components.html(
