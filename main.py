@@ -5,9 +5,9 @@ import shutil
 
 total, used, free = shutil.disk_usage("/")
 
-st.write("Total: %d GiB" % (total // (2**30)))
-st.write("Used: %d GiB" % (used // (2**30)))
-st.write("Free: %d GiB" % (free // (2**30)))
+# st.write("Total: %d GiB" % (total // (2**30)))
+# st.write("Used: %d GiB" % (used // (2**30)))
+# st.write("Free: %d GiB" % (free // (2**30)))
 
 
 st.header('QA & cheatsheets Elbrus Data Science')
