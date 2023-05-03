@@ -2,6 +2,8 @@ from random import seed
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+import torch
+import torchvision
 # import random_word
 from random_word import Wordnik
 wordnik_service = Wordnik()
@@ -258,3 +260,68 @@ components.html(
 <noscript><div><img src="https://mc.yandex.ru/watch/92504528" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 """)
+
+with st.expander('Convolutional'):
+    identity = torch.Tensor(
+        [[
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ]]
+    )
+    borders = torch.Tensor(
+        [[
+            [1, 0, -1],
+            [1, 0, -1],
+            [1, 0, -1]
+        ]]
+    )
+
+    embossing = torch.Tensor(
+            [[
+                [-2, -1, 0],
+                [-1, 1, 1],
+                [0, 1, 2]
+            ]]
+        )
+
+    sharpness = torch.Tensor(
+            [[
+                [0, -1, 0],
+                [-1, 5, -1],
+                [0, -1, 0]
+            ]]
+        )
+
+    gauss = torch.Tensor(
+        [[
+            [1, 2, 1],
+            [2, 4, 2],
+            [1, 2, 1],
+        ]]
+    )/16
+
+    choice = st.radio('Kernel', 
+                      [
+                          'None', 'Borders', 'Embossing', 'Sharpness', 'Gauss'
+                      ])
+    
+    if choice == 'Borders': weights = borders 
+    elif choice == 'Embossing': weights = embossing
+    elif choice == 'Sharpness': weights = sharpness
+    elif choice == 'Gauss': weights = gauss
+    elif choice == 'None': weights = identity
+
+    model = torch.nn.Conv2d(3, 1, 1)
+    model.weight = torch.nn.Parameter(torch.cat(3*[weights]).unsqueeze(0))
+
+    img = Image.open('aux/cat.png').convert('RGB')
+    img_tensor = torchvision.transforms.ToTensor()(img)
+    result = model(img_tensor.unsqueeze(0))
+    if result is not None:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image('aux/cat.png')
+        with col2:
+            st.image(result.detach().numpy()[0, 0, :, :], clamp=True)
+    
