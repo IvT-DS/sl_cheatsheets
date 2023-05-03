@@ -241,13 +241,6 @@ with st.expander('Singular value decomposition (SVD)'):
 # fig.show()
 
 with st.expander('Convolutional'):
-    identity = torch.Tensor(
-        [[
-            [0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0]
-        ]]
-    )
     borders = torch.Tensor(
         [[
             [1, 0, -1],
@@ -282,14 +275,13 @@ with st.expander('Convolutional'):
 
     choice = st.radio('Kernel', 
                       [
-                          'None', 'Borders', 'Embossing', 'Sharpness', 'Gauss'
+                        'Borders', 'Embossing', 'Sharpness', 'Gauss'
                       ])
     
     if choice == 'Borders': weights = borders 
     elif choice == 'Embossing': weights = embossing
     elif choice == 'Sharpness': weights = sharpness
     elif choice == 'Gauss': weights = gauss
-    elif choice == 'None': weights = identity
 
     model = torch.nn.Conv2d(3, 1, 1)
     model.weight = torch.nn.Parameter(torch.cat(3*[weights]).unsqueeze(0))
