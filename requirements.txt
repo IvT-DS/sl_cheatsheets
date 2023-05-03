@@ -3,3 +3,5 @@ random-word==1.0.10
 scikit-learn
 numpy
 plotly_express==0.4.0
+torch 
+torchvision
