@@ -9,6 +9,7 @@ teams = st.multiselect('Названия команд', [
     'sklearn', 'CountVectorizer', 'TfIDFVectorizer',
     'LogRegression', 'Ridge', 'LASSO', 'ElasticNet',
     'Poisson', 'Bernoulli', 'Gauss',
+    'Mean Squared Error', 'Mean Absolute Error',
     'XGBoost', 'LightGBM', 'CatBoost',
     'Dropout', 'Convolution','Linear',
     'GPT', 'BERT', 'LSTM', 'RNN', 'LSTM', 
@@ -26,7 +27,7 @@ names = st.radio(
                 # Вероника, Виктория, Иван, Ильвир', 
                 'Руслан, Александр, Артём, Евгений, Сергей, София', 
                 'Антон, Гриша, Владимир, Виктория, Дмитрий, Соломон, Владислав',
-                'Амгалан, Артур, Дмитрий, Ида, Илья, Ирина, Любовь, Рамзия, Семён, Костя'
+                'Амгалан, Артур, Дмитрий, Ида, Илья, Ирина, Любовь, Рамзия, Семён, Константин, Александр',
                 # add here more names as str
             ]
         )
