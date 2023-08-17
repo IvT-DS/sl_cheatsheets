@@ -14,7 +14,8 @@ teams = st.multiselect('Названия команд', [
     'Dropout', 'Convolution','Linear',
     'GPT', 'BERT', 'LSTM', 'RNN', 'LSTM', 
     'ResNet', 'Inception', 'DenseNet', 
-    'YOLO', 'FasterRCNN', 'SQL', 'PySpark'
+    'YOLO', 'FasterRCNN', 'Mask RCNN', 
+    'SQL', 'PySpark'
 ])
 
 names = st.radio(
