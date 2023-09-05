@@ -6,11 +6,12 @@ from sklearn.metrics import roc_curve
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 st.header('Классификация')
 
 
-st.image('https://miro.medium.com/max/1273/1*vbfuOkRGdcNkUXp8uEi4BA.png')
+st.image('https://miro.medium.com/max/1273/1*vbfuOkRGdcNkUXp8uEi4BA.png', width=300)
 
 '''
 - **TP** • True Positive • Истинно-положительный: классификатор отнес объект к классу `1` и объект действительно относится к классу `1` 
@@ -34,7 +35,7 @@ with st.expander('Пример'):
     acc = \dfrac{90}{90+10} = 0.9
     '''
     )
-    st.write('Метрика высока, однако модель не обнаружила ни одного объекта класса 0. ')
+    st.write('Метрика высока, однако модель не обнаружила ни одного объекта класса 1. ')
 
 '''
 ## Precision • Точность
@@ -137,6 +138,13 @@ with right_col:
     ax_2.set_xlabel('False positive rate')
     ax_2.text(.25, .1, f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}', fontsize=20)
     st.pyplot(fig_2)
+
+st.dataframe(pd.DataFrame(
+    {
+        'True labels' : true, 
+        'Predictions' : good
+    }
+).T)
 
     # st.latex(f'TPR={tpr[index_of_pos]}')
 

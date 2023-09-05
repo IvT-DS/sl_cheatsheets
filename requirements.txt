@@ -5,3 +5,5 @@ numpy
 plotly_express==0.4.0
 torch 
 torchvision
+seaborn
+pandas
