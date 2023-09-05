@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 st.header('Классификация')
 
@@ -120,24 +122,50 @@ index_of_pos = sum(t < float(tre)-.001)
 st.latex(' \\text{True positive rate}=\dfrac{TP}{TP+FN}, \quad \\text{False Positive Rate} = \dfrac{FP}{FP+TN}')
 
 left_col, right_col =  st.columns(2)
-with left_col:
-    fig_1, ax_1 = plt.subplots()
-    sns.kdeplot(good[:10], ax=ax_1, label='Положительный класс')
-    sns.kdeplot(good[-10:], ax=ax_1, label='Отриацательный класс')
-    plt.axvline(tre, ymin=0, ymax=2, linestyle='--', c='gray')
-    ax_1.set_xlim(0, 1.2)
-    ax_1.set_ylim(0, 2.6)
-    ax_1.set_xlabel('Распределение вероятностей предсказаний для классов 1 и 0')
-    ax_1.legend()
-    st.pyplot(fig_1)
-with right_col:
-    fig_2, ax_2 = plt.subplots()
-    ax_2.plot(fpr, tpr, marker='.')
-    ax_2.scatter(fpr[index_of_pos], tpr[index_of_pos], c='red', marker='*', s=50*5)
-    ax_2.set_ylabel('True positive rate')
-    ax_2.set_xlabel('False positive rate')
-    ax_2.text(.25, .1, f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}', fontsize=20)
-    st.pyplot(fig_2)
+# with left_col:
+fig_1, ax_1 = plt.subplots(figsize=(12, 3))
+sns.kdeplot(good[:10], ax=ax_1, label='Положительный класс', c='green')
+sns.kdeplot(good[-10:], ax=ax_1, label='Отрицательный класс', c='red')
+plt.axvline(tre, ymin=0, ymax=2, linestyle='--', c='gray')
+plt.fill_between(np.linspace(tre, 1.2, 10), [0]*10, [2.65]*10, color='green', alpha=.12)
+plt.fill_between(np.linspace(0, tre, 10), [0]*10, [2.65]*10, color='red', alpha=.12)
+ax_1.set_xlim(0, 1.2)
+ax_1.set_ylim(0, 2.6)
+ax_1.set_xlabel('Распределение вероятностей предсказаний для классов 1 и 0')
+ax_1.legend()
+st.pyplot(fig_1)
+# with right_col:
+    # fig_2, ax_2 = plt.subplots()
+    # ax_2.plot(fpr, tpr, marker='.')
+    # ax_2.scatter(fpr[index_of_pos], tpr[index_of_pos], c='red', marker='o', s=40*3)
+    # ax_2.set_ylabel('True positive rate')
+    # ax_2.set_xlabel('False positive rate')
+    # ax_2.text(.25, .1, f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}', fontsize=20)
+    # st.pyplot(fig_2)
+
+pair_fprtpr = pd.DataFrame(
+{
+    'fpr': fpr,
+    'tpr': tpr
+}
+)
+fig = px.line(pair_fprtpr,  x='fpr', y='tpr', markers=True)
+fig.add_trace(
+    go.Scatter(
+        x=[fpr[index_of_pos]], 
+        y=[tpr[index_of_pos]],
+        mode='markers', 
+        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
+fig.update_xaxes(range=(-.01, 1.1))
+fig.update_layout(showlegend=False)
+fig.add_annotation(
+    dict(font=dict(size=25),
+        x=.8, y=.1,
+        text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}',
+        showarrow=False
+    )
+)
+st.plotly_chart(fig, use_container_width=False)
 
 st.dataframe(pd.DataFrame(
     {
@@ -146,7 +174,10 @@ st.dataframe(pd.DataFrame(
     }
 ).T)
 
-    # st.latex(f'TPR={tpr[index_of_pos]}')
+
+
+
+
 
 
 
