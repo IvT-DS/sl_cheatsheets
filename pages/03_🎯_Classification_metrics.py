@@ -95,7 +95,7 @@ noise = np.random.normal(loc=0.01, scale=.03, size=80)
 #     'divider', min_value=1., max_value=3., step=.5
 # )
 
-good = [0.9, .9, .8, .9, .7, .6, .8, .9, .2, .8]*4 + [.2, .14, .4, .61, .18, .4, .5, .4, .2, .2]*4
+good = [0.8, .9, .8, .9, .7, .6, .8, .9, .2, .3]*4 + [.2, .14, .4, .61, .18, .4, .5, .4, .2, .2]*4
 good = (good + noise)
 true = [1]*40 + [0]*40
 
@@ -107,7 +107,7 @@ tre = st.slider(
     'Порог отнесения к классу 1', 
     min_value=0., 
     max_value=1., 
-    step=.01,
+    step=.02,
     )
 # st.write(t)
 # tre = st.select_slider(
@@ -123,19 +123,22 @@ with left_col:
     fig_1, ax_1 = plt.subplots()
     sns.kdeplot(good[:10], ax=ax_1, label='Положительный класс')
     sns.kdeplot(good[-10:], ax=ax_1, label='Отриацательный класс')
+    plt.axvline(tre, ymin=0, ymax=2, linestyle='--', c='gray')
     ax_1.set_xlim(0, 1.2)
+    ax_1.set_ylim(0, 2.6)
     ax_1.set_xlabel('Распределение вероятностей предсказаний для классов 1 и 0')
     ax_1.legend()
     st.pyplot(fig_1)
 with right_col:
     fig_2, ax_2 = plt.subplots()
-    ax_2.plot(fpr, tpr, marker='o')
+    ax_2.plot(fpr, tpr, marker='.')
     ax_2.scatter(fpr[index_of_pos], tpr[index_of_pos], c='red', marker='*', s=50*5)
     ax_2.set_ylabel('True positive rate')
     ax_2.set_xlabel('False positive rate')
+    ax_2.text(.25, .1, f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}', fontsize=20)
     st.pyplot(fig_2)
 
-    st.latex(f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}')
+    # st.latex(f'TPR={tpr[index_of_pos]}')
 
 
 
