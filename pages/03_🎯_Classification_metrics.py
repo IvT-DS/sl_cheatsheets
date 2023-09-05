@@ -155,7 +155,7 @@ fig.add_trace(
         x=[fpr[index_of_pos]], 
         y=[tpr[index_of_pos]],
         mode='markers',
-        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""), color='red')
+        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
 fig.update_xaxes(range=(-.01, 1.1))
 fig.update_layout(showlegend=False)
 fig.add_annotation(
