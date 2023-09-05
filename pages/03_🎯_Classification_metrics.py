@@ -154,8 +154,8 @@ fig.add_trace(
     go.Scatter(
         x=[fpr[index_of_pos]], 
         y=[tpr[index_of_pos]],
-        mode='markers', color='red',
-        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
+        mode='markers',
+        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""), color='red')
 fig.update_xaxes(range=(-.01, 1.1))
 fig.update_layout(showlegend=False)
 fig.add_annotation(
