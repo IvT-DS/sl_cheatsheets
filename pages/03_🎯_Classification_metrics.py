@@ -9,6 +9,7 @@ import seaborn as sns
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+st.set_page_config(layout="wide")
 
 st.header('Классификация')
 
@@ -91,14 +92,10 @@ with st.expander('Пусть есть confusion matrix для классифик
 ## ROC-AUC
 '''
 
-np.random.seed(42)
-noise = np.random.normal(loc=0.01, scale=.03, size=80)
+# np.random.seed(42)
+# noise = np.random.normal(loc=0.01, scale=.03, size=80)
 
-randomness = st.slider(
-    'Степень случайности', 
-    min_value=1., 
-    max_value=5.,
-    step=.5)
+
 
 
 # good = np.array([0.8, .9, .8, .9, .7, .6, .8, .9, .2, .3]*4  + [.2, .14, .4, .61, .18, .4, .5, .4, .2, .2]*4)
@@ -169,6 +166,16 @@ np.random.seed(43)
 n=50
 noise = np.random.normal(loc=0.01, scale=.08, size=n)
 
+left_col, right_col = st.columns(2)
+with left_col:
+    randomness = st.slider(
+    'Степень случайности классификатора', 
+    min_value=1., 
+    max_value=5.,
+    step=.5)
+with right_col:
+    t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.02)
+
 pos = (np.random.randint(5, 9, size=n)/10)/randomness + noise
 neg = np.random.randint(1, 5, size=n)/10 + noise
 
@@ -193,45 +200,54 @@ hist_style = dict(
         )
     )
 
-t_pos=st.slider('Threshold', min_value=0., max_value=1., step=.02)
+pair_fprtpr = pd.DataFrame(
+    {
+        'fpr': fpr,
+        'tpr': tpr
+    }
+    )
+
+
 
 index_of_pos = sum(t < float(t_pos)-.001)
-
-fig = go.Figure()
-fig.add_trace(go.Histogram(x=pos, name='Positive', marker=hist_style))
-fig.add_trace(go.Histogram(x=neg, name='Negative', marker=hist_style))
-fig.add_vline(x=t_pos, line_width=3, line_dash="dash", line_color="black")
-
-fig.update_layout(barmode='overlay')
-fig.update_traces(opacity=0.75)
-st.plotly_chart(fig)
-
 auc = roc_auc_score(target, preds)
 
-pair_fprtpr = pd.DataFrame(
-{
-    'fpr': fpr,
-    'tpr': tpr
-}
-)
-fig = px.line(pair_fprtpr,  x='fpr', y='tpr', markers=True)
-fig.add_trace(
-    go.Scatter(
-        x=[fpr[index_of_pos]], 
-        y=[tpr[index_of_pos]],
-        mode='markers',
-        hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
-fig.update_xaxes(range=(-.01, 1.1))
-fig.update_layout(showlegend=False)
-fig.add_annotation(
-    dict(font=dict(size=25),
-        x=.7, y=.1,
-        text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}, AUC={auc:.3f}',
-        showarrow=False
+
+
+left_col, right_col = st.columns(2)
+
+with left_col:
+
+    fig = go.Figure()
+    fig.add_trace(go.Histogram(x=pos, name='Положительный', marker=hist_style))
+    fig.add_trace(go.Histogram(x=neg, name='Отрицательный', marker=hist_style))
+    fig.add_vline(x=t_pos, line_width=3, line_dash="dash", line_color="black")
+
+    fig.update_layout(barmode='overlay')
+    fig.update_traces(opacity=0.75)
+    st.plotly_chart(fig)
+
+
+with right_col:
+
+    fig = px.line(pair_fprtpr,  x='fpr', y='tpr', markers=True)
+    fig.add_trace(
+        go.Scatter(
+            x=[fpr[index_of_pos]], 
+            y=[tpr[index_of_pos]],
+            mode='markers',
+            hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
+    fig.update_xaxes(range=(-.01, 1.1))
+    fig.update_layout(showlegend=False)
+    fig.add_annotation(
+        dict(font=dict(size=25),
+            x=.7, y=.1,
+            text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}, AUC={auc:.3f}',
+            showarrow=False
+        )
     )
-)
-st.plotly_chart(fig, use_container_width=False)
-st.latex(' \\text{True positive rate}=\dfrac{TP}{TP+FN}, \quad \\text{False Positive Rate} = \dfrac{FP}{FP+TN}')
+    st.plotly_chart(fig, use_container_width=False)
+    st.latex(' \\text{True positive rate}=\dfrac{TP}{TP+FN}, \quad \\text{False Positive Rate} = \dfrac{FP}{FP+TN}')
 
 
 
