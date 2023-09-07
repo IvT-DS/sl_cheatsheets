@@ -2,7 +2,9 @@ import streamlit as st
 
 import streamlit.components.v1 as components
 
-from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import (
+    roc_curve, roc_auc_score,
+    precision_recall_curve, average_precision_score, precision_score, recall_score)
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -164,7 +166,7 @@ with st.expander('Пусть есть confusion matrix для классифик
 
 np.random.seed(43)
 n=50
-noise = np.random.normal(loc=0.01, scale=.08, size=n)
+noise = np.random.normal(loc=0.02, scale=.03, size=n)
 
 left_col, right_col = st.columns(2)
 with left_col:
@@ -172,9 +174,9 @@ with left_col:
     'Степень случайности классификатора', 
     min_value=1., 
     max_value=5.,
-    step=.5)
+    step=.25)
 with right_col:
-    t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.02)
+    t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.1)
 
 pos = (np.random.randint(5, 9, size=n)/10)/randomness + noise
 neg = np.random.randint(1, 5, size=n)/10 + noise
@@ -210,11 +212,11 @@ pair_fprtpr = pd.DataFrame(
 
 
 index_of_pos = sum(t < float(t_pos)-.001)
-auc = roc_auc_score(target, preds)
+auc_score = roc_auc_score(target, preds)
 
 
 
-left_col, right_col = st.columns(2)
+left_col, center_col, right_col = st.columns(3)
 
 with left_col:
 
@@ -222,14 +224,21 @@ with left_col:
     fig.add_trace(go.Histogram(x=pos, name='Положительный', marker=hist_style))
     fig.add_trace(go.Histogram(x=neg, name='Отрицательный', marker=hist_style))
     fig.add_vline(x=t_pos, line_width=3, line_dash="dash", line_color="black")
+    fig.update_xaxes(range=(-.01, 1.03))
+    fig.update_layout(legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=0.01
+            ))  
 
     fig.update_layout(barmode='overlay')
     fig.update_traces(opacity=0.75)
     st.plotly_chart(fig)
 
 
-with right_col:
-
+with center_col:
+    # t = np.linspace(1, 0, len(tpr))
     fig = px.line(pair_fprtpr,  x='fpr', y='tpr', markers=True)
     fig.add_trace(
         go.Scatter(
@@ -237,18 +246,60 @@ with right_col:
             y=[tpr[index_of_pos]],
             mode='markers',
             hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
-    fig.update_xaxes(range=(-.01, 1.1))
+    fig.update_xaxes(range=(-.01, 1.03))
+    fig.update_yaxes(range=(0, 1.1))
     fig.update_layout(showlegend=False)
     fig.add_annotation(
         dict(font=dict(size=25),
             x=.7, y=.1,
-            text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}, AUC={auc:.3f}',
+            text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}, AUC={auc_score:.3f}',
             showarrow=False
         )
     )
     st.plotly_chart(fig, use_container_width=False)
-    st.latex(' \\text{True positive rate}=\dfrac{TP}{TP+FN}, \quad \\text{False Positive Rate} = \dfrac{FP}{FP+TN}')
+    st.latex(' \\text{TP rate}=\dfrac{TP}{TP+FN}, \quad \\text{FP Rate} = \dfrac{FP}{FP+TN}')
 
+with right_col:
+    precisions, recalls, trepr = precision_recall_curve(target, preds)
+    # trepr += [1.01]
+    # trepr = trepr[::-1]
+    trepr = np.linspace(0, 1, len(precisions))
+    ap_score = average_precision_score(target, preds)
+    pair_pr = pd.DataFrame(
+        {
+            'pr': precisions,
+            're': recalls
+        }
+        )
+    index_of_pos_pr = sum(trepr < float(t_pos)-.001)
+
+    # positive_for_label = [1 if i >= t_pos else 0 for i in preds]
+    # print(target)
+    # print(positive_for_label)
+    # pre_score_for_label = recall_score(np.array(target), np.array(preds))
+    # st.write(pre_score_for_label)
+
+    fig = px.line(pair_pr,  x='re', y='pr', markers=True)
+    fig.update_xaxes(range=(-.01, 1.01))
+    fig.update_yaxes(range=(0, 1.1))
+    fig.update_layout(showlegend=False)
+    fig.add_trace(
+        go.Scatter(
+            x=[recalls[index_of_pos_pr]], 
+            y=[precisions[index_of_pos_pr]],
+            mode='markers',
+            hovertext=f'Threshold: {trepr[index_of_pos_pr]:1f}', name=""))
+    # fig.add_annotation(
+    #     dict(font=dict(size=25),
+    #         x=.7, y=.1,
+    #         text=f'Pr={precisions[index_of_pos_pr-1]:.2f}, Re={recalls[index_of_pos_pr]:.2f}, AP={ap_score:.3f}',
+    #         showarrow=False
+    #     )
+    # )
+
+
+    st.plotly_chart(fig)
+    st.latex(' \\text{TP}=\dfrac{TP}{TP+FP}, \quad \\text{FP} = \dfrac{TP}{TP+FN}')
 
 
 
