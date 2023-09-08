@@ -299,6 +299,7 @@ with right_col:
 
 
     st.plotly_chart(fig)
+    st.write('ok')
     st.latex(' \\text{TP}=\dfrac{TP}{TP+FP}, \quad \\text{FP} = \dfrac{TP}{TP+FN}')
 
 
