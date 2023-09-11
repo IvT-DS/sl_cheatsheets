@@ -176,9 +176,9 @@ with left_col:
     max_value=5.,
     step=.25)
 with right_col:
-    t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.1)
+    t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.05)
 
-pos = (np.random.randint(5, 9, size=n)/10)/randomness + noise
+pos = (np.random.randint(6, 9, size=n)/10)/randomness + noise
 neg = np.random.randint(1, 5, size=n)/10 + noise
 
 
@@ -220,17 +220,40 @@ left_col, center_col, right_col = st.columns(3)
 
 with left_col:
 
+    barstyle = dict(start=0.0, end=1.0, size=.05)
+
     fig = go.Figure()
-    fig.add_trace(go.Histogram(x=pos, name='Положительный', marker=hist_style))
-    fig.add_trace(go.Histogram(x=neg, name='Отрицательный', marker=hist_style))
+    fig.add_trace(
+        go.Histogram(
+            x=pos, 
+            name='Положительный', 
+            marker=hist_style, 
+            xbins=barstyle
+        )
+    )
+    fig.add_trace(
+        go.Histogram(
+            x=neg, 
+            name='Отрицательный', 
+            marker=hist_style,
+            xbins=barstyle
+        )
+    )
+    
     fig.add_vline(x=t_pos, line_width=3, line_dash="dash", line_color="black")
     fig.update_xaxes(range=(-.01, 1.03))
+    fig.update_layout(
+    autosize=False,
+    width=600,
+    height=400
+    )
     fig.update_layout(legend=dict(
                 yanchor="top",
                 y=0.99,
                 xanchor="left",
                 x=0.01
             ))  
+    # fig.update_layout(width = 20)
 
     fig.update_layout(barmode='overlay')
     fig.update_traces(opacity=0.75)
@@ -249,15 +272,21 @@ with center_col:
     fig.update_xaxes(range=(-.01, 1.03))
     fig.update_yaxes(range=(0, 1.1))
     fig.update_layout(showlegend=False)
+    fig.update_layout(
+    autosize=False,
+    width=600,
+    height=400
+    )
     fig.add_annotation(
         dict(font=dict(size=25),
-            x=.7, y=.1,
+            x=.6, y=.1,
             text=f'TPR={tpr[index_of_pos]}, FPR={fpr[index_of_pos]}, AUC={auc_score:.3f}',
             showarrow=False
         )
     )
     st.plotly_chart(fig, use_container_width=False)
-    st.latex(' \\text{TP rate}=\dfrac{TP}{TP+FN}, \quad \\text{FP Rate} = \dfrac{FP}{FP+TN}')
+    st.latex(' \\text{TP rate}=\dfrac{TP}{TP+FN}')
+    st.latex('\\text{FP Rate} = \dfrac{FP}{FP+TN}')
 
 with right_col:
     precisions, recalls, trepr = precision_recall_curve(target, preds)
@@ -283,12 +312,17 @@ with right_col:
     fig.update_xaxes(range=(-.01, 1.01))
     fig.update_yaxes(range=(0, 1.1))
     fig.update_layout(showlegend=False)
-    fig.add_trace(
-        go.Scatter(
-            x=[recalls[index_of_pos_pr]], 
-            y=[precisions[index_of_pos_pr]],
-            mode='markers',
-            hovertext=f'Threshold: {trepr[index_of_pos_pr]:1f}', name=""))
+    fig.update_layout(
+        autosize=False,
+        width=600,
+        height=400
+        )
+    # fig.add_trace(
+    #     go.Scatter(
+    #         x=[recalls[index_of_pos_pr]], 
+    #         y=[precisions[index_of_pos_pr]],
+    #         mode='markers',
+    #         hovertext=f'Threshold: {trepr[index_of_pos_pr]:1f}', name=""))
     # fig.add_annotation(
     #     dict(font=dict(size=25),
     #         x=.7, y=.1,
@@ -299,8 +333,9 @@ with right_col:
 
 
     st.plotly_chart(fig)
-    st.write('ok')
-    st.latex(' \\text{TP}=\dfrac{TP}{TP+FP}, \quad \\text{FP} = \dfrac{TP}{TP+FN}')
+    # st.write('ok')
+    st.latex(' \\text{Precision}=\dfrac{TP}{TP+FP}')
+    st.latex(' \\text{Recall} = \dfrac{TP}{TP+FN}')
 
 
 
