@@ -33,6 +33,8 @@ names = st.radio(
             ]
         )
 
+
+
 gen_btn = st.button('Generate')
 # print(labels)
 st.markdown('---------')
