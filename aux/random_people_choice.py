@@ -1,4 +1,4 @@
-from numpy.random import choice
+from numpy.random import choice, shuffle
 
 def random_people_choice(people: list, teams_names: list) -> dict:
     teams = {}
@@ -23,3 +23,10 @@ def random_people_choice(people: list, teams_names: list) -> dict:
                 pass
     # st.write(teams)
     return teams
+
+def get_teams(peoples: list, teams: int):
+    shuffle(peoples)
+    pairs = dict()
+    for team_index, i in enumerate(range(0, len(peoples), len(teams))):
+        pairs[teams[team_index]] = peoples[i:i + len(teams)]
+    return pairs

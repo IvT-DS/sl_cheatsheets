@@ -1,5 +1,5 @@
 import streamlit as st
-from aux.random_people_choice import random_people_choice
+from aux.random_people_choice import random_people_choice, get_teams
 import streamlit.components.v1 as components
 
 st.header('Генератор команд')
@@ -36,12 +36,11 @@ names = st.radio(
 
 
 gen_btn = st.button('Generate')
-# print(labels)
 st.markdown('---------')
 if names and len(teams) != 0 and gen_btn:
-    pairs = random_people_choice(names.split(','), teams)
-    for team_name, names in pairs.items():
-        st.markdown(f'__{team_name}__:  {(", ".join(names))}')
+    pairs = get_teams(names.split(', '), teams)
+    for team_name, team_participants in pairs.items():
+        st.markdown(f'__{team_name}__:  {(", ".join(team_participants))}')
 
 components.html(
     """
