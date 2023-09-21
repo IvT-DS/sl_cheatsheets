@@ -2,8 +2,8 @@
 magicEnabled = true
 
 [theme]
-primaryColor="#4520AB"
-backgroundColor="#FFFFFF"
-secondaryBackgroundColor="#F0F2F6"
+base="light"
+primaryColor="#4520ab"
+secondaryBackgroundColor="#e6e6ea"
 textColor="#262730"
-font="sans serif"
+
