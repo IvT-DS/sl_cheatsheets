@@ -175,23 +175,24 @@ with left_col:
     min_value=1., 
     max_value=5.,
     step=.25)
-with right_col:
     t_pos=st.slider('Порог отнесения к классу 1', min_value=0., max_value=1., step=.05)
 
-pos = (np.random.randint(6, 9, size=n)/10)/randomness + noise
-neg = np.random.randint(1, 5, size=n)/10 + noise
+    
+
+    pos = (np.random.randint(6, 9, size=n)/10)/randomness + noise
+    neg = np.random.randint(1, 5, size=n)/10 + noise
 
 
 
-preds = np.concatenate([pos, neg])
-target = [1]*50 + [0]*50
+    preds = np.concatenate([pos, neg])
+    target = [1]*50 + [0]*50
 
-st.dataframe(pd.DataFrame(
-    {
-        'True labels' : target, 
-        'Predictions' : preds
-    }
-).T)
+    st.dataframe(pd.DataFrame(
+        {
+            'True labels' : target, 
+            'Predictions' : preds
+        }
+    ).T)
 
 fpr, tpr, t = roc_curve(target, preds)
 
@@ -210,16 +211,7 @@ pair_fprtpr = pd.DataFrame(
     )
 
 
-
-index_of_pos = sum(t < float(t_pos)-.001)
-auc_score = roc_auc_score(target, preds)
-
-
-
-left_col, center_col, right_col = st.columns(3)
-
-with left_col:
-
+with right_col:
     barstyle = dict(start=0.0, end=1.0, size=.05)
 
     fig = go.Figure()
@@ -259,22 +251,37 @@ with left_col:
     fig.update_traces(opacity=0.75)
     st.plotly_chart(fig)
 
+index_of_pos = sum(t < float(t_pos)-.001)
+auc_score = roc_auc_score(target, preds)
 
-with center_col:
+
+
+left_col_roc, right_col_pr = st.columns(2)
+
+# with left_col:
+
+
+
+
+with left_col_roc:
     # t = np.linspace(1, 0, len(tpr))
     fig = px.line(pair_fprtpr,  x='fpr', y='tpr', markers=True)
+    fig.update_traces(line_color='LightSkyBlue', line_width=3)
     fig.add_trace(
         go.Scatter(
             x=[fpr[index_of_pos]], 
             y=[tpr[index_of_pos]],
             mode='markers',
-            hovertext=f'Threshold: {t[index_of_pos]:1f}', name=""))
-    fig.update_xaxes(range=(-.01, 1.03))
+            hovertext=f'Threshold: {t[index_of_pos]:1f}', name="", 
+            marker=dict(color='mediumslateblue', size=20)
+        )
+    )
+    fig.update_xaxes(range=(-.01, 1.02))
     fig.update_yaxes(range=(0, 1.1))
     fig.update_layout(showlegend=False)
     fig.update_layout(
     autosize=False,
-    width=600,
+    width=620,
     height=400
     )
     fig.add_annotation(
@@ -288,10 +295,9 @@ with center_col:
     st.latex(' \\text{TP rate}=\dfrac{TP}{TP+FN}')
     st.latex('\\text{FP Rate} = \dfrac{FP}{FP+TN}')
 
-with right_col:
+with right_col_pr:
     precisions, recalls, trepr = precision_recall_curve(target, preds)
-    # trepr += [1.01]
-    # trepr = trepr[::-1]
+
     trepr = np.linspace(0, 1, len(precisions))
     ap_score = average_precision_score(target, preds)
     pair_pr = pd.DataFrame(
@@ -301,14 +307,8 @@ with right_col:
         }
         )
     index_of_pos_pr = sum(trepr < float(t_pos)-.001)
-
-    # positive_for_label = [1 if i >= t_pos else 0 for i in preds]
-    # print(target)
-    # print(positive_for_label)
-    # pre_score_for_label = recall_score(np.array(target), np.array(preds))
-    # st.write(pre_score_for_label)
-
     fig = px.line(pair_pr,  x='re', y='pr', markers=True)
+    fig.update_traces(line_color='LightSkyBlue', line_width=3)
     fig.update_xaxes(range=(-.01, 1.01))
     fig.update_yaxes(range=(0, 1.1))
     fig.update_layout(showlegend=False)
@@ -317,23 +317,8 @@ with right_col:
         width=600,
         height=400
         )
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=[recalls[index_of_pos_pr]], 
-    #         y=[precisions[index_of_pos_pr]],
-    #         mode='markers',
-    #         hovertext=f'Threshold: {trepr[index_of_pos_pr]:1f}', name=""))
-    # fig.add_annotation(
-    #     dict(font=dict(size=25),
-    #         x=.7, y=.1,
-    #         text=f'Pr={precisions[index_of_pos_pr-1]:.2f}, Re={recalls[index_of_pos_pr]:.2f}, AP={ap_score:.3f}',
-    #         showarrow=False
-    #     )
-    # )
-
 
     st.plotly_chart(fig)
-    # st.write('ok')
     st.latex(' \\text{Precision}=\dfrac{TP}{TP+FP}')
     st.latex(' \\text{Recall} = \dfrac{TP}{TP+FN}')
 
