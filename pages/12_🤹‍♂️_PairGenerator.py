@@ -29,7 +29,8 @@ names = st.radio(
                 # 'Руслан, Александр, Артём, Евгений, Сергей, София', 
                 # 'Антон, Гриша, Владимир, Виктория, Дмитрий, Соломон, Владислав',
                 'Амгалан, Артур, Дмитрий, Илья, Ирина, Рамзия, Семён, Константин',
-                'Даниил, Дмитрий, Лариса, Ерлан, София'
+                'Даниил, Дмитрий, Лариса, София',
+                'Алексей А, Алексей Д, Егор, Роман, Светлана, Татьяна, Тигран, Алиса, Анастасия, Руслан'
                 # add here more names as str
             ]
         )
@@ -39,6 +40,8 @@ names = st.radio(
 gen_btn = st.button('Generate')
 st.markdown('---------')
 if names and len(teams) != 0 and gen_btn:
+        # st.write(names.split(', '))
+        # st.write(teams)
     pairs = get_teams(names.split(', '), teams)
     for team_name, team_participants in pairs.items():
         st.markdown(f'__{team_name}__:  {(", ".join(team_participants))}')

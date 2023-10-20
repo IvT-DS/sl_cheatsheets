@@ -1,4 +1,5 @@
 from numpy.random import choice, shuffle
+from typing import List
 
 def random_people_choice(people: list, teams_names: list) -> dict:
     teams = {}
@@ -24,9 +25,27 @@ def random_people_choice(people: list, teams_names: list) -> dict:
     # st.write(teams)
     return teams
 
-def get_teams(peoples: list, teams: int):
-    shuffle(peoples)
-    pairs = dict()
-    for team_index, i in enumerate(range(0, len(peoples), len(teams))):
-        pairs[teams[team_index]] = peoples[i:i + len(teams)]
-    return pairs
+# def get_teams(peoples: list, teams: int):
+#     shuffle(peoples)
+#     pairs = dict()
+#     for team_index, i in enumerate(range(0, len(peoples), len(teams))):
+#         pairs[teams[team_index]] = peoples[i:i + len(teams)]
+#     return pairs
+
+def get_teams(students: List[str], teams: List[str]) -> dict:
+    
+    #Shuffle list of students
+    shuffle(students)
+    
+    #Create groups
+    all_groups = []
+    for index in range(len(teams)):
+        group = students[index::len(teams)]
+        all_groups.append(group)
+    
+    #Format and display groups
+    # for team, group in zip(teams, all_groups):
+    #     print(f"✨Group {team}✨: {' / '.join(group)}\n")
+
+    return {team : group for team, group in zip(teams, all_groups)}
+    
