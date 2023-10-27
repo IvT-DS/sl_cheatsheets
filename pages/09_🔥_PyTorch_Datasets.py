@@ -129,6 +129,7 @@ train_loader = DataLoader(train_dataset, shuffle=True, batch_size=32)
 import os
 from torchvision import transforms as T
 from torchvision.io import read_image
+from torch.utils.data import Dataset
 
 preprocessing = T.Compose(
     [
@@ -145,10 +146,10 @@ class CustomImageDataset(Dataset):
         self.noise_names = sorted(os.listdir(noise_dir))
         self.clean_names = sorted(os.listdir(clean_dir))
         self.aug = aug
+
     def __len__(self):
         return len(self.noise_names)
     
-
 
     def __getitem__(self, idx):
         noisy_img = read_image(os.path.join(self.noise_dir, self.noise_names[idx]))
@@ -156,7 +157,7 @@ class CustomImageDataset(Dataset):
         if self.aug:
             noisy_img = self.aug(noisy_img)
             clean_img = self.aug(clean_img)
-        return noisy_img, clean_img
+        return noisy_img, clean_img <- Это то, что будет в цикле обучения возвращать loader
 ```
 '''
 
