@@ -9,11 +9,11 @@ teams = st.multiselect('Названия команд', [
     'sklearn', 'CountVectorizer', 'TfIDFVectorizer',
     'LogRegression', 'Ridge', 'LASSO', 'ElasticNet',
     'Poisson', 'Bernoulli', 'Gauss',
-    'Mean Squared Error', 'Mean Absolute Error',
+    'MSE', 'MAE', 'MAPE',
     'XGBoost', 'LightGBM', 'CatBoost',
     'Dropout', 'Convolution','Linear',
     'GPT', 'BERT', 'LSTM', 'RNN', 'LSTM', 
-    'ResNet', 'Inception', 'DenseNet', 
+    'ResNet', 'Inception', 'DenseNet', 'VGG', 'AlexNet'
     'YOLO', 'FasterRCNN', 'Mask RCNN', 
     'SQL', 'PySpark'
 ])
