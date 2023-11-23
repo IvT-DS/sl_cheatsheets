@@ -13,7 +13,7 @@ teams = st.multiselect('Названия команд', [
     'XGBoost', 'LightGBM', 'CatBoost',
     'Dropout', 'Convolution','Linear',
     'GPT', 'BERT', 'LSTM', 'RNN', 'LSTM', 
-    'ResNet', 'Inception', 'DenseNet', 'VGG', 'AlexNet',
+    'ResNet', 'Inception', 'DenseNet', 'VGG', 'AlexNet', 'MobileNet'
     'YOLO', 'FasterRCNN', 'Mask RCNN', 
     'SQL', 'PySpark'
 ])
